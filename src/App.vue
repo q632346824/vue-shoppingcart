@@ -1,0 +1,124 @@
+<template>
+  <div id="app" class="app-container">
+    <mt-header fixed title="This is a demo">
+		<span @click="goBack" slot="left" v-show="flag">
+			<mt-button icon="back">Back</mt-button>
+		</span>
+    </mt-header>
+
+		<transition>
+			<router-view></router-view>
+		</transition>
+		
+
+
+    <nav class="mui-bar mui-bar-tab">
+			<router-link class="mui-tab-item-llb" to="/Home">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">Home</span>
+			</router-link>
+			<router-link class="mui-tab-item-llb" to="/Shopcart">
+				<span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge" id="badge" v-show=" this.$store.getters.getAllCount!==0">{{ this.$store.getters.getAllCount }}</span></span>
+				<span class="mui-tab-label">Cart</span>
+			</router-link>
+
+		</nav>
+  </div>
+</template>
+
+<script>
+export default {
+	name: 'app',
+	data(){
+		return {flag:false}
+  },
+	methods:{
+		goBack(){
+			this.$router.go(-1)
+	}
+  },
+	created(){
+		this.flag=this.$router.path==='/home'?false:true
+	},
+	watch:{
+		'$route.path':function(newVal){
+
+			if(newVal==='/Home'){
+			this.flag=false
+			}else{
+			this.flag=true
+			}
+		}
+  }
+
+}
+</script>
+
+<style lang="scss">
+
+
+.app-container {
+
+//   font-family: 'Avenir', Helvetica, Arial, sans-serif;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+  margin:0;
+	padding-top:40px;
+	padding-bottom:50px;
+	overflow-x:hidden;
+
+	.mint-header.is-fixed{
+	z-index:99;
+  }
+}
+
+	.v-enter{
+		opacity:0;
+		transform:translateX(100%)
+
+	}          //从右侧进来 从左侧消失
+	
+	.v-leave-to{
+		opacity:0;
+		transform:translateX(-100%);
+		position:absolute;
+	}
+
+	.v-enter.active,.v-leave-active{
+		transition: all 0.5s ease;
+	}
+
+
+
+.mui-bar-tab .mui-tab-item-llb.mui-active {
+    color: #007aff;
+}
+
+.mui-bar-tab .mui-tab-item-llb {
+    display: table-cell;
+    overflow: hidden;
+    width: 1%;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #929292;
+}
+
+.mui-bar-tab .mui-tab-item-llb .mui-icon {
+    top: 3px;
+    width: 24px;
+    height: 24px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.mui-bar-tab .mui-tab-item-llb .mui-icon~.mui-tab-label {
+    font-size: 11px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+</style>
